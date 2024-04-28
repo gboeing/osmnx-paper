@@ -23,4 +23,4 @@ repos:
     rev: v0.2.2
     hooks:
       - id: chktex-system
-        args: [-eall, -n22, -n30]
+        args: [-eall, -n10, -n17, -n22, -n30, -n36, -n46]
