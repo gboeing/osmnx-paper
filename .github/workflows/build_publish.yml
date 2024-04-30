@@ -15,7 +15,7 @@ jobs:
       - name: Build PDF
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: cv-gboeing.tex
+          root_file: osmnx-paper.tex
 
 #      - name: Publish PDF
 #        uses: appleboy/scp-action@v0.1.7
