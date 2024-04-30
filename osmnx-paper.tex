@@ -1,3 +1,9 @@
+%!TeX program = pdflatex
+% Modeling and Analyzing Urban Networks and Amenities with OSMnx
+% Author: Geoff Boeing
+% Web: https://geoffboeing.com
+% Repo: https://github.com/gboeing/osmnx-paper
+
 \RequirePackage[l2tabu,orthodox]{nag} % warn if using any obsolete or outdated commands
 \documentclass[12pt,letterpaper]{article} % document style
 
@@ -38,7 +44,7 @@
 \newcommand{\myaffiliation}{University of Southern California}
 \newcommand{\paperdate}{\monthyeardate\today}
 \newcommand{\papertitle}{Modeling and Analyzing Urban Networks and Amenities with OSMnx}
-\newcommand{\papercitation}{Boeing, G. \the\year. \papertitle. Working paper. \href{https://bit.ly/osmnx-paper}{https://bit.ly/osmnx-paper}}
+\newcommand{\papercitation}{Boeing, G. \the\year. \papertitle. Working paper.\ \href{https://bit.ly/osmnx-paper}{https://bit.ly/osmnx-paper}}
 \newcommand{\paperkeywords}{network science, openstreetmap, street networks, transportation, urban planning}
 
 
@@ -112,7 +118,7 @@ A node's \textit{degree} is how many edges are incident on that node. For exampl
 
 A \textit{path} is a sequence of edges linking a sequence of nodes. The graph \textit{distance} between two nodes is the count of edges in the shortest such path between them. A \textit{weighted} graph's distance is the sum of some edge impedance attribute (e.g., length or time) along the shortest path minimizing that sum. A directed graph is strongly \textit{connected} if a path exists between each ordered pair of nodes, and it is weakly connected if such a path exists only if its edges are undirected. A disconnected graph contains multiple connected \textit{components}---each a disjoint set of nodes forming its own connected subgraph.
 
-Spatial networks' nodes and/or edges are embedded in space. Spatial graphs thus model both topology and geometry \citep{fischer_spatial_2014}. \textit{Topology} refers to the structure and configuration of the nodes and edges, whereas \textit{geometry} encompasses positions, lengths, angles, etc. A \textit{planar} graph can be represented in a two-dimensional plane such that its edges intersect only at nodes \citep{barthelemy_modeling_2008}. Most street networks are nonplanar due to the occasional presence of overpasses and underpasses, but their spatial embedding and \enquote{approximate} planarity constrain their topological characteristics relative to other kinds of complex networks \citep{boeing_planarity_2020}. A \textit{primal} graph of a street network models its intersections and dead-ends as nodes and its street segments as edges \citep{porta_network_2006-1}. A \textit{line} graph (sometimes called a \textit{dual} graph) inverts this topology to instead model streets as nodes and their intersections as edges \citep{porta_network_2006}, though this discards much of the network's geographical characteristics \citep{ratti_space_2004}.
+Spatial networks' nodes and/or edges are embedded in space. Spatial graphs thus model both topology and geometry \citep{fischer_spatial_2014}.\ \textit{Topology} refers to the structure and configuration of the nodes and edges, whereas \textit{geometry} encompasses positions, lengths, angles, etc. A \textit{planar} graph can be represented in a two-dimensional plane such that its edges intersect only at nodes \citep{barthelemy_modeling_2008}. Most street networks are nonplanar due to the occasional presence of overpasses and underpasses, but their spatial embedding and \enquote{approximate} planarity constrain their topological characteristics relative to other kinds of complex networks \citep{boeing_planarity_2020}. A \textit{primal} graph of a street network models its intersections and dead-ends as nodes and its street segments as edges \citep{porta_network_2006-1}. A \textit{line} graph (sometimes called a \textit{dual} graph) inverts this topology to instead model streets as nodes and their intersections as edges \citep{porta_network_2006}, though this discards much of the network's geographical characteristics \citep{ratti_space_2004}.
 
 \subsection{Street Network Analysis}
 
