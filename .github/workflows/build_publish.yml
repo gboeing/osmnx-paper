@@ -3,6 +3,7 @@ name: Build and Publish PDF
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   build_latex:
@@ -17,13 +18,13 @@ jobs:
         with:
           root_file: osmnx-paper.tex
 
-#      - name: Publish PDF
-#        uses: appleboy/scp-action@v0.1.7
-#        with:
-#          host: ${{ secrets.SSH_HOST }}
-#          username: ${{ secrets.SSH_USERNAME }}
-#          key: ${{ secrets.SSH_KEY }}
-#          passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
-#          source: "osmnx-paper.pdf"
-#          target: "~/public_html/share"
-#          use_insecure_cipher: true
+      - name: Publish PDF
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
+          source: "osmnx-paper.pdf"
+          target: "~/public_html/share"
+          use_insecure_cipher: true
