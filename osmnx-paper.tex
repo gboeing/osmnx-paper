@@ -32,6 +32,7 @@
 \usepackage{graphicx} % better inclusion of graphics
 \usepackage{hyperref} % hypertext in document
 \usepackage{natbib} % author-year citations w/ bibtex, including textual and parenthetical
+\usepackage{orcidlink}
 \usepackage{rotating} % rotate wide tables or figures on a page to make them landscape
 \usepackage{titlesec} % custom section and subsection heading
 \usepackage{url} % make nice line-breakable urls
@@ -83,8 +84,8 @@
 %\doublespacing
 \begin{document}
 
-\title{\papertitle}
-\author[]{\myname}
+\title{\papertitle~\footnote{Citation info: \papercitation}}
+\author[]{\myname~\footnote{Correspondence: \href{mailto:\myemail}{\myemail}}~~\orcidlink{0000-0003-1851-6411}}
 \affil[]{\myaffiliation}
 \date{\paperdate}
 
@@ -92,7 +93,7 @@
 
 \begin{abstract}
 
-OSMnx is a Python package for downloading, modeling, analyzing, and visualizing urban networks and any other geospatial features from OpenStreetMap data. A large and growing body of literature uses it to conduct scientific studies across the disciplines of geography, urban planning, transport engineering, computer science, and others. The OSMnx project has recently developed and implemented many new features, modeling capabilities, and analytical methods. The package now encompasses substantially more functionality than was previously documented in the literature. Accordingly, this paper introduces the OSMnx package's new capabilities, usage, and design---in addition to the scientific theory and logic underlying them. Finally, it reflects on tool building in geographical information science and the implications for urban modeling and analysis in the mode of open science.\footnote{Citation info: \papercitation}%\footnote{Correspondence: \href{mailto:\myemail}{\myemail}}
+OSMnx is a Python package for downloading, modeling, analyzing, and visualizing urban networks and any other geospatial features from OpenStreetMap data. A large and growing body of literature uses it to conduct scientific studies across the disciplines of geography, urban planning, transport engineering, computer science, and others. The OSMnx project has recently developed and implemented many new features, modeling capabilities, and analytical methods. The package now encompasses substantially more functionality than was previously documented in the literature. Accordingly, this paper introduces the OSMnx package's new capabilities, usage, and design---in addition to the scientific theory and logic underlying them. Finally, it reflects on tool building in geographical information science and the implications for urban modeling and analysis in the mode of open science.
 
 \end{abstract}
 
@@ -112,13 +113,13 @@ Numerous sources cover spatial network theory and analysis \citep[e.g.,][]{tinkl
 
 \subsection{Model Fundamentals}
 
-Real-world networks are commonly modeled as mathematical \textit{graphs} \citep{trudeau_introduction_1994}. A graph, $G$, is a data structure consisting of two sets: one set, $N$, contains \textit{nodes} that are linked to each other by the second set, $E$, containing node pairs called \textit{edges}. Let $G = (N, E)$ and $\{u, v\} \subseteq N$ and $\{u, v\} \in E$. We can say for graph $G$ that: 1) edge $\{u, v\}$ links nodes $u$ and $v$, 2) edge $\{u, v\}$ is \textit{incident} to $u$ and to $v$, 3) $u$ is \textit{adjacent} to $v$ and vice versa, and 4) $u$ and $v$ are \textit{neighbors} \citep{newman_networks:_2010}. An adjacency matrix can fully represent a graph by defining these adjacent node pairs.
+Real-world networks are commonly modeled as mathematical \textit{graphs} \citep{trudeau_introduction_1994, barthelemy_spatial_2022}. A graph, $G$, is a data structure consisting of two sets: one set, $N$, contains \textit{nodes} that are linked to each other by the second set, $E$, containing node pairs called \textit{edges}. Let $G = (N, E)$ and $\{u, v\} \subseteq N$ and $\{u, v\} \in E$. We can say for graph $G$ that: 1) edge $\{u, v\}$ links nodes $u$ and $v$, 2) edge $\{u, v\}$ is \textit{incident} to $u$ and to $v$, 3) $u$ is \textit{adjacent} to $v$ and vice versa, and 4) $u$ and $v$ are \textit{neighbors} \citep{newman_networks:_2010}. An adjacency matrix can fully represent a graph by defining these adjacent node pairs.
 
 A node's \textit{degree} is how many edges are incident to that node. For example, a node with degree 2 has two incident edges which are consequently adjacent to each other. An edge can be \textit{undirected} (linking two nodes bidirectionally), \textit{directed} (linking one-way from a source node to a target node), or a \textit{self-loop} (linking one node back to itself). A graph with directed edges is a directed graph, or \textit{digraph}. A graph that allows multiple edges to link a single pair of nodes is a \textit{multigraph} and those multiple edges are called \textit{parallel} edges.
 
 A \textit{path} is a sequence of edges linking a sequence of nodes. The graph \textit{distance} between two nodes is the count of edges in the shortest such path between them. A \textit{weighted} graph's distance is the sum of some edge impedance attribute (e.g., length or time) along the shortest path minimizing that sum. A directed graph is strongly \textit{connected} if a path exists between each ordered pair of nodes, and it is weakly connected if such a path exists only if its edges are undirected. A disconnected graph contains multiple connected \textit{components}---each a disjoint set of nodes forming its own connected subgraph.
 
-Spatial networks' nodes and/or edges are embedded in space. Spatial graphs thus model both topology and geometry \citep{fischer_spatial_2014}.\ \textit{Topology} refers to the structure and configuration of the nodes and edges, whereas \textit{geometry} encompasses positions, lengths, angles, etc. A \textit{planar} graph can be represented in a two-dimensional plane such that its edges intersect only at nodes \citep{barthelemy_modeling_2008}. Most street networks are nonplanar due to the occasional presence of overpasses and underpasses, but their spatial embedding and \enquote{approximate} planarity constrain their topological characteristics relative to other kinds of complex networks \citep{boeing_planarity_2020}. A \textit{primal} graph of a street network models its intersections and dead-ends as nodes and its street segments as edges \citep{porta_network_2006-1}. A \textit{line} graph (sometimes called a \textit{dual} graph) inverts this topology to instead model streets as nodes and their intersections as edges \citep{porta_network_2006}, though this discards much of the network's geometry \citep{ratti_space_2004}.
+Spatial networks' nodes and/or edges are embedded in space \citep{barthelemy_spatial_2022}. Spatial graphs thus model both topology and geometry \citep{fischer_spatial_2014}.\ \textit{Topology} refers to the structure and configuration of the nodes and edges, whereas \textit{geometry} encompasses positions, lengths, angles, etc. A \textit{planar} graph's topology can be represented in a two-dimensional plane such that its edges intersect only at nodes \citep{barthelemy_modeling_2008}. Most street networks are nonplanar due to the occasional presence of overpasses and underpasses, but their spatial embedding and \enquote{approximate} planarity constrain their topological characteristics relative to other kinds of complex networks \citep{boeing_planarity_2020}. A \textit{primal} graph models a street network's intersections and dead-ends as nodes and its street segments as edges \citep{porta_network_2006-1}. A \textit{line} graph (sometimes called a \textit{dual} graph) inverts this topology to instead model streets as nodes and their intersections as edges \citep{porta_network_2006}, though it discards much of the network's geometry \citep{ratti_space_2004}.
 
 \subsection{Street Network Analysis}
 
@@ -186,15 +187,21 @@ OSMnx models a one-way street as a single directed edge from node $u$ to node $v
 
 The \texttt{graph} module uses filters to query the Overpass API:\@ users can either specify a built-in network type or provide their own custom filter written in OverpassQL.\@ Under the hood, OSMnx does several things to generate the best possible model. It initially buffers the query area by 500 meters to create the initial graph before truncating it to the user's desired query area. This ensures accurate streets-per-node counts by attenuating graph perimeter effects. As the graph may contain many small disconnected components around the perimeter, by default it returns the largest weakly connected component. OSMnx also automatically simplifies the graph topology as discussed below.
 
-\subsection{Topology Simplification and Correction}
+\subsection{Graph Simplification}
 
-The \texttt{simplification} module automatically processes the network's topology from the original raw OpenStreetMap data to ensure that individual nodes represent individual intersections or dead-ends and edges represent the street segments that link them. This simplification is of two primary types: graph simplification and intersection consolidation.
+The \texttt{simplification} module automatically processes the network's topology from the original raw OpenStreetMap data to ensure that individual nodes represent individual intersections or dead-ends and edges represent the street segments that link them. This graph simplification is of two primary types---edge simplification and node consolidation---described in detail in \citet{boeing_graph_2024} and summarized here.
 
-\textit{Graph simplification}, put simply, merges adjacent edges for a better model. It cleans up the graph's topology so that nodes represent intersections or dead-ends and edges represent street segments. This is important because in OpenStreetMap's raw data, ways comprise sets of straight-line segments between nodes: that is, nodes are vertices for streets' curving line geometries, not just intersections and dead-ends. By default, OSMnx simplifies this topology by deleting non-intersection/dead-end nodes, merging the edges between them into a new \enquote{simplified} edge, and retaining the complete true edge geometry as an edge attribute. When multiple OpenStreetMap ways are thus merged into a new graph edge, the ways' attribute values can be aggregated into a single value.
+\begin{figure*}[tbp]
+    \centering
+    \includegraphics[width=1\textwidth]{fig_graph_simplification.png}
+    \caption{Graph of a town's street network before (left) and after (right) edge simplification.}\label{fig:graph_simplification}
+\end{figure*}
 
-\textit{Intersection consolidation}, put simply, merges nearby nodes for a better model. This is important because many real-world street networks feature complex intersections and traffic circles, resulting in a cluster of graph nodes where there is really just one true intersection as we would consider it in transport planning or urban design. Similarly, divided roads are often represented by separate centerline edges. The intersection of 2 divided roads thus creates 4 nodes where each edge intersects a perpendicular edge---but these 4 nodes represent a single intersection in the real world. OSMnx can consolidate such complex intersections into a single node and optionally rebuild the graph's edge topology accordingly. When multiple OpenStreetMap nodes are thus merged into a new graph node, the nodes' attribute values can be aggregated into a single value.
+\textit{Edge simplification}, put simply, merges adjacent edges for a better model. It cleans up the graph's topology so that nodes represent intersections or dead-ends and edges represent street segments as illustrated in Figure~\ref{fig:graph_simplification}. This is important because in OpenStreetMap's raw data, ways comprise sets of straight-line segments between nodes: that is, nodes are vertices for streets' curving line geometries, not just intersections and dead-ends. By default, OSMnx simplifies this topology by deleting non-intersection/dead-end nodes, merging the edges between them into a new \enquote{simplified} edge, and retaining the complete true edge geometry as an edge attribute. When multiple OpenStreetMap ways are thus merged into a new graph edge, the ways' attribute values can be aggregated into a single value.
 
-Graph simplification and intersection consolidation offer several benefits. They produce a more accurate model that better represents the real world. This in turn yields more accurate network measures, for example by not overcounting complex intersections when calculating intersection density or by not underrepresenting street segment lengths. Finally, many graph algorithms' time complexity scales with node or edge count. By generating a graph with (often drastically) fewer nodes and edges---yet no loss of accuracy---many algorithms will complete much faster. This matters most when analyzing large urban networks, where runtime becomes an issue.
+\textit{Node consolidation}, put simply, merges nearby nodes for a better model. This is important because many real-world street networks feature complex intersections and traffic circles, resulting in a cluster of graph nodes where there is really just one true intersection as we would consider it in transport planning or urban design. Similarly, divided roads are often represented by separate centerline edges. The intersection of 2 divided roads thus creates 4 nodes where each edge intersects a perpendicular edge---but these 4 nodes represent a single intersection in the real world. OSMnx can consolidate such complex intersections into a single node and optionally rebuild the graph's edge topology accordingly. When multiple OpenStreetMap nodes are thus merged into a new graph node, the nodes' attribute values can be aggregated into a single value.
+
+Edge simplification and node consolidation offer several benefits. They produce a more accurate model that better represents the real world. This in turn yields more accurate network measures, for example by not overcounting complex intersections when calculating intersection density or by not underrepresenting street segment lengths. Finally, many graph algorithms' time complexity scales with node or edge count. By generating a graph with (often drastically) fewer nodes and edges---yet no loss of accuracy---many algorithms will complete much faster. This matters most when analyzing large urban networks, where runtime becomes an issue.
 
 \subsection{Converting, Projecting, and Saving}
 
@@ -232,7 +239,7 @@ Once installed and imported, users can configure OSMnx through its \texttt{setti
 
 The open science movement calls for accessible, reusable, and well-documented research tools to support better science. The OSMnx project seeks to contribute to these goals in urban science by offering such a tool for modeling and analyzing urban networks and amenities anywhere in the world from OpenStreetMap data. It embodies the relevant domain theory from urban planning, network science, and geographical information science in an easy-to-use tool. In turn, researchers no longer have to reinvent the wheel and make dozens of ad hoc modeling decisions for each analytics project.
 
-Along these lines, the OSMnx project aims to improve reproducibility by allowing users to automatically model networks with clearly defined spatial extents, thoroughly documented modeling decisions, and theoretically-sophisticated results. For example, its graph models are primal, nonplanar, directed, weighted, multigraphs with possible self-loops to capture the diversity of network types and characteristics around the world. Its graph creation methods attenuate perimeter effects, and its graph simplification and consolidation methods generate models that flexibly match real-world expectations and use.
+Along these lines, the OSMnx project aims to improve reproducibility by allowing users to automatically model networks with clearly defined spatial extents, thoroughly documented modeling decisions, and theoretically-sophisticated results. For example, its graph models are primal, nonplanar, directed, weighted, multigraphs with possible self-loops to capture the diversity of network types and characteristics around the world. Its graph creation methods attenuate perimeter effects, and its graph simplification methods generate models that flexibly match real-world expectations and use.
 
 This paper documented the package's current organization, capabilities, and scientific underpinnings. Better tools, led by academic domain experts, represent one of the key paths forward toward better and more open science.
 
@@ -246,6 +253,6 @@ The author wishes to thank the developers and maintainers of the many other pack
 % print the bibliography
 \setlength{\bibsep}{0.00cm plus 0.05cm} % no space between items
 \bibliographystyle{apalike}
-\bibliography{references}
+\bibliography{references-all}
 
 \end{document}
