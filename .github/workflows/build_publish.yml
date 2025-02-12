@@ -1,6 +1,7 @@
+---
 name: Build and Publish PDF
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches: [main]
   workflow_dispatch:
@@ -25,6 +26,6 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
-          source: "osmnx-paper.pdf"
-          target: "~/public_html/share"
+          source: osmnx-paper.pdf
+          target: ~/public_html/share
           use_insecure_cipher: true
