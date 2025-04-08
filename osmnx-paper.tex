@@ -85,9 +85,9 @@
 %\doublespacing
 \begin{document}
 
-\title{\papertitle}%~\footnote{Citation info: \papercitation}}
-\author[]{REDACTED}%\myname~\footnote{Correspondence: \href{mailto:\myemail}{\myemail}}~~\orcidlink{0000-0003-1851-6411}}
-\affil[]{REDACTED}%\myaffiliation}
+\title{\papertitle~\footnote{Citation info: \papercitation}}
+\author[]{\myname~\footnote{Correspondence: \href{mailto:\myemail}{\myemail}}~~\orcidlink{0000-0003-1851-6411}}
+\affil[]{\myaffiliation}
 \date{\paperdate}
 
 \maketitle
@@ -234,13 +234,13 @@ The \texttt{routing} module can solve shortest paths for network routing---paral
 
 The \texttt{stats} module can calculate a variety of geometric and topological network measures \citep{boeing_street_2022}. These measures define streets as the edges in an undirected representation of the graph to prevent double-counting the bidirectional edges of a two-way street. Users can automatically calculate common measures from transport planning, urban design, and network science, including intersection density, circuity, average node degree, centrality, and many others. Users can also use NetworkX directly to calculate dozens of additional topological network measures. OSMnx's \texttt{bearing} module can calculate the streets' compass bearings and the network's orientation entropy \citep{boeing_urban_2019}. Finally, the \texttt{utils\_geo} module exposes a set of geospatial utility functions for graph-constrained spatial sampling, point interpolation, and more.
 
-\begin{figure*}[tbh]
+\begin{figure*}[tb]
     \centering
     \includegraphics[width=1\textwidth]{fig_street_orientations.png}
     \caption{Polar histograms and corresponding street maps illustrating orientation entropy: low (Chicago), medium (New Orleans), and high (Rome). Histogram bar directions represent street compass bearings and lengths represent relative frequency. Source: \citet{barthelemy_review_2024}.}\label{fig:street_orientations}
 \end{figure*}
 
-\begin{figure*}[tbh]
+\begin{figure*}[tb]
 \centering
 \includegraphics[width=1\textwidth]{fig_figure_ground.jpg}
 \caption{Figure-ground diagrams of one square mile of each city, allowing us to compare street network form in different places. Source: \citet{boeing_spatial_2021}.}\label{fig:figure_ground}
