@@ -42,10 +42,10 @@
 
 \newcommand{\myname}{Geoff Boeing}
 \newcommand{\myemail}{boeing@usc.edu}
-\newcommand{\myaffiliation}{University of Southern California}
+\newcommand{\myaffiliation}{Department of Urban Planning and Spatial Analysis\\University of Southern California}
 \newcommand{\paperdate}{\monthyeardate\today}
 \newcommand{\papertitle}{Modeling and Analyzing Urban Networks and Amenities with OSMnx}
-\newcommand{\papercitation}{Boeing, G. \the\year. \papertitle. Working paper.\ \href{https://geoffboeing.com/publications/osmnx-paper/}{https://geoffboeing.com/publications/osmnx-paper/}}
+\newcommand{\papercitation}{Boeing, G. 2025. \papertitle. \textit{Geographical Analysis}, published online ahead of print. \href{https://doi.org/10.1111/gean.70009}{doi:10.1111/gean.70009}}
 \newcommand{\paperkeywords}{network science, openstreetmap, street networks, transportation, urban planning}
 
 
@@ -86,9 +86,9 @@
 \begin{document}
 
 \title{\papertitle~\footnote{Citation info: \papercitation}}
-\author[]{\myname~\footnote{Correspondence: \href{mailto:\myemail}{\myemail}}~~\orcidlink{0000-0003-1851-6411}}
+\author[]{\myname~\footnote{Correspondence: \href{mailto:\myemail}{\myemail}}~~\orcidlink{0000-0003-1851-6411}}  % chktex 8
 \affil[]{\myaffiliation}
-\date{\paperdate}
+\date{}%\paperdate}
 
 \maketitle
 
@@ -114,7 +114,7 @@ To describe precisely what this package does and how it works, we must first int
 
 \subsection{Model Fundamentals}
 
-Real-world networks are commonly modeled as mathematical \textit{graphs} \citep{trudeau_introduction_1994, barthelemy_spatial_2022}. A graph, $G$, is a data structure consisting of two sets: one set, $N$, contains \textit{nodes} that are linked to each other by the second set, $E$, which contains node pairs (as sets or tuples) called \textit{edges}. Let $G = (N, E)$ and $\{u, v\} \subseteq N$ and $\{u, v\} \in E$. We can thus say for graph $G$ that: 1) edge $\{u, v\}$ links nodes $u$ and $v$, 2) edge $\{u, v\}$ is \textit{incident} to $u$ and to $v$, 3) $u$ is \textit{adjacent} to $v$ and vice versa, and 4) $u$ and $v$ are \textit{neighbors} \citep{newman_networks:_2010}. An adjacency matrix can fully represent a graph by defining these adjacent node pairs.
+Real-world networks are commonly modeled as mathematical \textit{graphs} \citep{trudeau_introduction_1994, barthelemy_spatial_2022}. A graph, $G$, is a data structure consisting of two sets: one set, $N$, contains \textit{nodes} that are linked to each other by the second set, $E$, which contains node pairs (as sets or tuples) called \textit{edges}. Let $G = (N, E)$ and $\{u, v\} \subseteq N$ and $\{u, v\} \in E$. We can thus say for graph $G$ that: (1) edge $\{u, v\}$ links nodes $u$ and $v$, (2) edge $\{u, v\}$ is \textit{incident} to $u$ and to $v$, (3) $u$ is \textit{adjacent} to $v$ and vice versa, and (4) $u$ and $v$ are \textit{neighbors} \citep{newman_networks:_2010}. An adjacency matrix can fully represent a graph by defining these adjacent node pairs.
 
 A node's \textit{degree} is how many edges are incident to that node. For example, a node with degree 2 has two incident edges which are consequently adjacent to each other. An edge can be \textit{undirected} (a 2-set, thus linking two nodes bidirectionally), \textit{directed} (a 2-tuple, thus linking one-way from a source node to a target node), or a \textit{self-loop} (linking one node back to itself). A graph with directed edges is called a directed graph, or \textit{digraph}. A graph that allows multiple edges to link a single pair of nodes is a \textit{multigraph} and those multiple edges are called \textit{parallel} edges.
 
@@ -152,16 +152,16 @@ In turn, OSMnx has recently become a standard tool in the literature for both re
 
 Here we provide an up-to-date\endnote{This article documents OSMnx version 2.0.1, released January 2025.} description of the package's modular organization, capabilities, and usage. OSMnx is structured as a collection of 17 modules that organize related functionality (Table~\ref{tab:osmnx_modules}). It uses the data structures of NetworkX \citep{hagberg_exploring_2008}, a network analysis Python package, and GeoPandas \citep{van_den_bossche_geopandasgeopandas_2024}, a Python package for working with geospatial dataframes. It interacts with three public web APIs to collect data: the OpenStreetMap Nominatim API, the Overpass API, and the Google Maps Elevation API (or their equivalents with the same interface).
 
-\begin{table*}[tbh]
+\begin{table*}[p!]
     \centering
     \caption{The OSMnx v2.0 public API's modules and the functionality they expose.}\label{tab:osmnx_modules}
-    \begin{tabular}{lp{10cm}}
+    \begin{tabular}{lp{9.7cm}}
         \toprule
         Module &  Functionality \\
         \midrule
         \texttt{bearing}  & Calculate graph edge compass bearings and orientation entropy.\\
         \texttt{convert}  & Convert a graph to/from different data structures.\\
-        \texttt{distance}  & Calculate spatial distances and find nearest graph node/edge(s) to point(s).\\
+        \texttt{distance}  & Calculate spatial distances and find nearest graph nodes or edges to points.\\
         \texttt{elevation}  &  Attach node elevations from raster files or a Google Maps compatible elevation API, and calculate edge grades.\\
         \texttt{features}  &  Download OSM geospatial features' geometries and attributes, such as points of interest, building footprints, transit stops, etc.\\
         \texttt{geocoder}  & Geocode place names or addresses or retrieve OSM elements by place name or ID, via the Nominatim API.\\
@@ -194,7 +194,7 @@ Using OSMnx's \texttt{graph} module, users can download any spatial network data
 
 OSMnx models spatial networks as primal, nonplanar, weighted, directed multigraphs with possible self-loops---specifically, these are NetworkX \texttt{MultiDiGraph} data structures \citep{hagberg_exploring_2008}. It models a one-way street as a single directed edge from node $u$ to node $v$, but a bidirectional street is modeled with two reciprocal directed edges (with identical geometries)---one from $u$ to $v$ and another from $v$ to $u$---to represent both possible directions of flow. Because these graphs are nonplanar, they correctly model the topology of interchanges, overpasses, and underpasses. That is, edge crossings in a two-dimensional plane are not nodes in an OSMnx model unless they represent true junctions in the three-dimensional real world.
 
-Under the hood, OSMnx does several things to produce the best possible model, many of which aim to attenuate the \enquote{artificial perimeter} problem of making a graph model of a real-world network. It initially buffers the query boundary by 500 meters to create a preliminary graph before truncating it to the user's desired query boundary: this ensures accurate streets-per-node counts around the perimeter. As the graph may contain some disconnected components, OSMnx returns the largest weakly connected component by default, though this is configurable. This parameterization allows users to control which trade-off they prefer: either 1) retaining everything within the boundary even if it includes some small disconnected components that inhibit routing, or 2) discarding some elements within the boundary to ensure graph connectivity. OSMnx also automatically simplifies the graph topology as discussed below.
+Under the hood, OSMnx does several things to produce the best possible model, many of which aim to attenuate the \enquote{artificial perimeter} problem of making a graph model of a real-world network. It initially buffers the query boundary by 500 meters to create a preliminary graph before truncating it to the user's desired query boundary: this ensures accurate streets-per-node counts around the perimeter. As the graph may contain some disconnected components, OSMnx returns the largest weakly connected component by default, though this is configurable. This parameterization allows users to control which trade-off they prefer: either (1) retaining everything within the boundary even if it includes some small disconnected components that inhibit routing, or (2) discarding some elements within the boundary to ensure graph connectivity. OSMnx also automatically simplifies the graph topology as discussed below.
 
 \subsubsection{Graph Simplification}
 
@@ -274,13 +274,13 @@ The OSMnx v2.0 API exposes 17 public modules, as detailed in Section~\ref{sec:mo
 
 Good documentation is also key to making an API usable and comprehensible. The OSMnx project emphasizes complete and clear documentation including a \enquote{getting started} guide for newcomers and a comprehensive examples gallery containing tutorials, feature demonstrations, and sample code. Every module and function contains a \textit{docstring} explaining its purpose, important notes or the scientific basis of algorithms and implementations, and the details of parameters and return values. These docstrings make the code \enquote{self-documenting} in that their consistent format and contents allow an up-to-date API reference to be automatically rendered and published on the web every time the codebase's main branch is updated.
 
-Lastly, OSMnx is fully type-annotated. This seemingly inconsequential observation deserves some explanation. One of Python's benefits is that it is a dynamically-typed language: its objects and variables do not have their types specified by the coder. Rather, a variable implicitly takes on the data type of whatever value it is assigned, each time it is assigned. The drawback is that bugs can be hard to detect when a coding mistake allows a variable to be assigned a value with an unexpected data type, which then propagates through the system or causes an inscrutable error for edge cases. Type annotation allows the coder to specify objects' types without enforcing them. This adopts the benefits of type signatures in statically-typed languages like C or Rust by providing 1) type hints to the user and 2) the option of enforcing static typing in the software development pipeline, as discussed below.
+Lastly, OSMnx is fully type-annotated. This seemingly inconsequential observation deserves some explanation. One of Python's benefits is that it is a dynamically-typed language: its objects and variables do not have their types specified by the coder. Rather, a variable implicitly takes on the data type of whatever value it is assigned, each time it is assigned. The drawback is that bugs can be hard to detect when a coding mistake allows a variable to be assigned a value with an unexpected data type, which then propagates through the system or causes an inscrutable error for edge cases. Type annotation allows the coder to specify objects' types without enforcing them. This adopts the benefits of type signatures in statically-typed languages like C or Rust by providing (1) type hints to the user and (2) the option of enforcing static typing in the software development pipeline, as discussed below.
 
 \subsection{Development Pipeline}
 
 The term \enquote{DevOps} refers to integrating software development with deployment and operations processes. OSMnx does this by automating its testing, packaging, and deployment workflows. This includes continuous integration: the practice of maintaining a clean main code branch and frequently merging code changes after they have undergone code review and passed a series of tests. Automating these mundane processes is particularly important for relatively small and resource-constrained open-source projects.
 
-The OSMnx project has converged around a modern set of Python-oriented tools to do this. It uses Git for version control and GitHub for project management and collaboration, and its continuous integration test workflow includes 1) a large suite of unit tests run via pytest, 2) code coverage tests via Codecov to ensure that newly added code is fully tested (OSMnx's current codebase coverage exceeds 98\%), 3) code quality, linting, and formatting tests via Ruff to ensure that coding best practices and project standards are followed, 4) static type checking via mypy and runtime type checking via Typeguard to ensure consistent typing throughout the package, and 5) documentation linting and building via numpydoc and Sphinx to ensure that docstrings meet standards and that the documentation website is always up to date. Some of these standards were decided on and enforced during v2.0 development (requiring significant changes), but it would be much easier to build around them upfront at the start of a project.
+The OSMnx project has converged around a modern set of Python-oriented tools to do this. It uses Git for version control and GitHub for project management and collaboration, and its continuous integration test workflow includes (1) a large suite of unit tests run via pytest, (2) code coverage tests via Codecov to ensure that newly added code is fully tested (OSMnx's current codebase coverage exceeds 98\%), (3) code quality, linting, and formatting tests via Ruff to ensure that coding best practices and project standards are followed, (4) static type checking via mypy and runtime type checking via Typeguard to ensure consistent typing throughout the package, and (5) documentation linting and building via numpydoc and Sphinx to ensure that docstrings meet standards and that the documentation website is always up to date. Some of these standards were decided on and enforced during v2.0 development (requiring significant changes), but it would be much easier to build around them upfront at the start of a project.
 
 Other workflows run on a schedule to test against both minimum required dependency versions (for backwards compatibility) and pre-release dependency versions (for future compatibility). Finally, two other workflows handle continuous deployment whenever a new release is tagged on Github. One builds a Docker image and publishes it to DockerHub, and the other builds the Python package for distribution and publishes it on PyPI for users to install.
 
